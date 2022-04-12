@@ -13,7 +13,7 @@ questions:
   label: Controller image path
   group: "Container Images"
 - variable: controller.image.tag
-  default: "5.0.0-preview.3"
+  default: ""
   description: image tag for controller
   type: string
   label: Controller Image Tag
@@ -25,7 +25,7 @@ questions:
   label: Manager image path
   group: "Container Images"
 - variable:  manager.image.tag
-  default: "5.0.0-preview.3"
+  default: ""
   description: image tag for  manager
   type: string
   label: Manager Image Tag
@@ -37,7 +37,7 @@ questions:
   label: Enforcer image path
   group: "Container Images"
 - variable: enforcer.image.tag
-  default: "5.0.0-preview.3"
+  default: ""
   description: image tag for enforcer
   type: string
   label: Enforcer Image Tag
@@ -49,7 +49,7 @@ questions:
   label: Scanner image path
   group: "Container Images"
 - variable: cve.scanner.image.tag
-  default: "latest"
+  default: ""
   description: image tag for scanner
   type: string
   label: Scanner Image Tag
@@ -61,7 +61,7 @@ questions:
   label: CVE Updater image path
   group: "Container Images"
 - variable: cve.updater.image.tag
-  default: "5.0.0-preview.3"
+  default: ""
   description: image tag for updater
   type: string
   label: Updater Image Tag
