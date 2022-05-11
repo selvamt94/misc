@@ -13,4 +13,4 @@ NeuVector integrates tightly with Rancher and Kubernetes to extend the built-in 
 
 Additional Notes:
 + Configure correct container runtime and runtime path under container runtime. Enable only one runtime.
-+ Neuvector deployed from Partners chart repository do not support SSO and other Rancher Manager integration features. Neuvector deployments from Rancher, such as from our Partners chart repository or the primary NeuVector Helm chart, must be completely removed in order to update to the new integrated feature chart. See  [#37447](https://github.com/rancher/rancher/issues/37447)
++ Neuvector deployed from Partners chart repository do not support Single Sign On from Rancher Manager. Please deploy Neuvector from Rancher charts for Single Sign On to work.
