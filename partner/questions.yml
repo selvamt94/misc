@@ -170,23 +170,23 @@ questions:
     - "LoadBalancer"
 - variable: controller.federation.mastersvc.type
   default: ""
-  description: Multi-cluster master cluster service type. If specified, the deployment will be used to manage other clusters. Possible values include NodePort, LoadBalancer and Ingress
+  description: Multi-cluster master cluster service type. If specified, the deployment will be used to manage other clusters. Possible values include NodePort, LoadBalancer and ClusterIP
   type: enum
   label: Fed Master Service Type
   group: "Service Configuration"
   options:
     - "NodePort"
-    - "Ingress"
+    - "ClusterIP"
     - "LoadBalancer"
 - variable: controller.federation.managedsvc.type
   default: ""
-  description: Multi-cluster managed cluster service type. If specified, the deployment will be managed by the master clsuter. Possible values include NodePort, LoadBalancer and Ingress
+  description: Multi-cluster managed cluster service type. If specified, the deployment will be managed by the master clsuter. Possible values include NodePort, LoadBalancer and ClusterIP
   type: enum
   label: Fed Managed service type
   group: "Service Configuration"
   options:
     - "NodePort"
-    - "Ingress"
+    - "ClusterIP"
     - "LoadBalancer"
 - variable: controller.apisvc.type
   default: "NodePort"
