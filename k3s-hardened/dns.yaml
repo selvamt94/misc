@@ -1,8 +1,17 @@
-#!/bin/bash -e
-
-for namespace in $(kubectl get namespaces -A -o=jsonpath="{.items[*]['metadata.name']}"); do
-  echo -n "Patching namespace $namespace "
-  cp .dns.yaml dns.yaml
-  sed -i "s/namespace1/${namespace}/" dns.yaml
-  kubectl apply -f dns.yaml
-done
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-network-dns-policy
+  namespace: namespace1
+spec:
+  ingress:
+  - ports:
+    - port: 53
+      protocol: TCP
+    - port: 53
+      protocol: UDP
+  podSelector:
+    matchLabels:
+      k8s-app: kube-dns
+  policyTypes:
+  - Ingress
