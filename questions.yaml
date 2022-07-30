@@ -100,132 +100,140 @@ questions:
   type: boolean
   label: Manager ingress status
   group: "Ingress Configuration"
-- variable: manager.ingress.host
-  default: ""
-  description: Must set this host value if ingress is enabled
-  type: string
-  label: Manager Ingress host
-  group: "Ingress Configuration"
-- variable: manager.ingress.path
-  default: "/"
-  description: Set ingress path
-  type: string
-  label: Manager Ingress path
-  group: "Ingress Configuration"
-- variable: manager.ingress.annotations
-  default: "{}"
-  description: Add annotations to ingress to influence behavior. Please use the 'Edit as YAML' feature in the Rancher UI to add single or multiple lines of annotation.
-  type: string
-  label: Manager Ingress annotations
-  group: "Ingress Configuration"
+  show_subquestion_if: true
+  subquestions:
+  - variable: manager.ingress.host
+    default: ""
+    description: Must set this host value if ingress is enabled
+    type: string
+    label: Manager Ingress host
+    group: "Ingress Configuration"
+  - variable: manager.ingress.path
+    default: "/"
+    description: Set ingress path
+    type: string
+    label: Manager Ingress path
+    group: "Ingress Configuration"
+  - variable: manager.ingress.annotations
+    default: "{}"
+    description: Add annotations to ingress to influence behavior. Please use the 'Edit as YAML' feature in the Rancher UI to add single or multiple lines of annotation.
+    type: string
+    label: Manager Ingress annotations
+    group: "Ingress Configuration"
 - variable: controller.ingress.enabled
   default: false
   description: If true, create ingress for rest api, must also set ingress host value
   type: boolean
   label: Controller ingress status
   group: "Ingress Configuration"
-- variable: controller.ingress.host
-  default: ""
-  description: Must set this host value if ingress is enabled
-  type: string
-  label: Controller Ingress host
-  group: "Ingress Configuration"
-- variable: controller.ingress.path
-  default: "/"
-  description: Set ingress path
-  type: string
-  label: Controller Ingress path
-  group: "Ingress Configuration"
-- variable: controller.ingress.annotations
-  default: "{}"
-  description: Add annotations to ingress to influence behavior. Please use the 'Edit as YAML' feature in the Rancher UI to add single or multiple lines of annotation.
-  type: string
-  label: Controller Ingress annotations
-  group: "Ingress Configuration"
+  show_subquestion_if: true
+  subquestions:
+  - variable: controller.ingress.host
+    default: ""
+    description: Must set this host value if ingress is enabled
+    type: string
+    label: Controller Ingress host
+    group: "Ingress Configuration"
+  - variable: controller.ingress.path
+    default: "/"
+    description: Set ingress path
+    type: string
+    label: Controller Ingress path
+    group: "Ingress Configuration"
+  - variable: controller.ingress.annotations
+    default: "{}"
+    description: Add annotations to ingress to influence behavior. Please use the 'Edit as YAML' feature in the Rancher UI to add single or multiple lines of annotation.
+    type: string
+    label: Controller Ingress annotations
+    group: "Ingress Configuration"
 - variable: controller.federation.mastersvc.ingress.enabled
   default: false
   description: If true, create ingress for rest api, must also set ingress host value
   type: boolean
   label: Controller Federation Master Service Ingress status
   group: "Ingress Configuration"
-- variable: controller.federation.mastersvc.ingress.tls
-  default: false
-  description: If true, TLS is enabled for controller federation master ingress service
-  type: boolean
-  label: Controller Federation Master Service Ingress TLS status
-  group: "Ingress Configuration"
-- variable: controller.federation.mastersvc.ingress.host
-  default: ""
-  description: Must set this host value if ingress is enabled
-  type: string
-  label: Controller Federation Master Service Ingress host
-  group: "Ingress Configuration"
-- variable: controller.federation.mastersvc.ingress.path
-  default: "/"
-  description: Set ingress path
-  type: string
-  label: Controller Federation Master Service Ingress path
-  group: "Ingress Configuration"
-- variable: controller.federation.mastersvc.ingress.ingressClassName
-  default: ""
-  description: To be used instead of the ingress.class annotation if an IngressClass is provisioned
-  type: string
-  label: Controller Federation Master Service Ingress ingressClassName
-  group: "Ingress Configuration"
-- variable: controller.federation.mastersvc.ingress.secretName
-  default: ""
-  description: Name of the secret to be used for TLS-encryption
-  type: string
-  label: Controller Federation Master Service Ingress secretName
-  group: "Ingress Configuration"
-- variable: controller.federation.mastersvc.ingress.annotations
-  default: "{}"
-  description: Add annotations to ingress to influence behavior. Please use the 'Edit as YAML' feature in the Rancher UI to add single or multiple lines of annotation.
-  type: string
-  label: Controller Federation Master Service Ingress annotations
-  group: "Ingress Configuration"
+  show_subquestion_if: true
+  subquestions:
+  - variable: controller.federation.mastersvc.ingress.tls
+    default: false
+    description: If true, TLS is enabled for controller federation master ingress service
+    type: boolean
+    label: Controller Federation Master Service Ingress TLS status
+    group: "Ingress Configuration"
+  - variable: controller.federation.mastersvc.ingress.host
+    default: ""
+    description: Must set this host value if ingress is enabled
+    type: string
+    label: Controller Federation Master Service Ingress host
+    group: "Ingress Configuration"
+  - variable: controller.federation.mastersvc.ingress.path
+    default: "/"
+    description: Set ingress path
+    type: string
+    label: Controller Federation Master Service Ingress path
+    group: "Ingress Configuration"
+  - variable: controller.federation.mastersvc.ingress.ingressClassName
+    default: ""
+    description: To be used instead of the ingress.class annotation if an IngressClass is provisioned
+    type: string
+    label: Controller Federation Master Service Ingress ingressClassName
+    group: "Ingress Configuration"
+  - variable: controller.federation.mastersvc.ingress.secretName
+    default: ""
+    description: Name of the secret to be used for TLS-encryption
+    type: string
+    label: Controller Federation Master Service Ingress secretName
+    group: "Ingress Configuration"
+  - variable: controller.federation.mastersvc.ingress.annotations
+    default: "{}"
+    description: Add annotations to ingress to influence behavior. Please use the 'Edit as YAML' feature in the Rancher UI to add single or multiple lines of annotation.
+    type: string
+    label: Controller Federation Master Service Ingress annotations
+    group: "Ingress Configuration"
 - variable: controller.federation.managedsvc.ingress.enabled
   default: false
   description: If true, create ingress for rest api, must also set ingress host value
   type: boolean
   label: Controller Federation Managed Service Ingress status
   group: "Ingress Configuration"
-- variable: controller.federation.managedsvc.ingress.tls
-  default: false
-  description: If true, TLS is enabled for controller federation managed ingress service
-  type: boolean
-  label: Controller Federation Managed Service Ingress TLS status
-  group: "Ingress Configuration"
-- variable: controller.federation.managedsvc.ingress.host
-  default: ""
-  description: Must set this host value if ingress is enabled
-  type: string
-  label: Controller Federation Managed Service Ingress host
-  group: "Ingress Configuration"
-- variable: controller.federation.managedsvc.ingress.path
-  default: "/"
-  description: Set ingress path
-  type: string
-  label: Controller Federation Managed Service Ingress path
-  group: "Ingress Configuration"
-- variable: controller.federation.managedsvc.ingress.ingressClassName
-  default: ""
-  description: To be used instead of the ingress.class annotation if an IngressClass is provisioned
-  type: string
-  label: Controller Federation Managed Service Ingress ingressClassName
-  group: "Ingress Configuration"
-- variable: controller.federation.managedsvc.ingress.secretName
-  default: ""
-  description: Name of the secret to be used for TLS-encryption
-  type: string
-  label: Controller Federation Managed Service Ingress secretName
-  group: "Ingress Configuration"
-- variable: controller.federation.managedsvc.ingress.annotations
-  default: "{}"
-  description: Add annotations to ingress to influence behavior. Please use the 'Edit as YAML' feature in the Rancher UI to add single or multiple lines of annotation.
-  type: string
-  label: Controller Federation Managed Service Ingress annotations
-  group: "Ingress Configuration"
+  show_subquestion_if: true
+  subquestions:
+  - variable: controller.federation.managedsvc.ingress.tls
+    default: false
+    description: If true, TLS is enabled for controller federation managed ingress service
+    type: boolean
+    label: Controller Federation Managed Service Ingress TLS status
+    group: "Ingress Configuration"
+  - variable: controller.federation.managedsvc.ingress.host
+    default: ""
+    description: Must set this host value if ingress is enabled
+    type: string
+    label: Controller Federation Managed Service Ingress host
+    group: "Ingress Configuration"
+  - variable: controller.federation.managedsvc.ingress.path
+    default: "/"
+    description: Set ingress path
+    type: string
+    label: Controller Federation Managed Service Ingress path
+    group: "Ingress Configuration"
+  - variable: controller.federation.managedsvc.ingress.ingressClassName
+    default: ""
+    description: To be used instead of the ingress.class annotation if an IngressClass is provisioned
+    type: string
+    label: Controller Federation Managed Service Ingress ingressClassName
+    group: "Ingress Configuration"
+  - variable: controller.federation.managedsvc.ingress.secretName
+    default: ""
+    description: Name of the secret to be used for TLS-encryption
+    type: string
+    label: Controller Federation Managed Service Ingress secretName
+    group: "Ingress Configuration"
+  - variable: controller.federation.managedsvc.ingress.annotations
+    default: "{}"
+    description: Add annotations to ingress to influence behavior. Please use the 'Edit as YAML' feature in the Rancher UI to add single or multiple lines of annotation.
+    type: string
+    label: Controller Federation Managed Service Ingress annotations
+    group: "Ingress Configuration"
 #service configurations
 - variable: manager.svc.type
   default: "NodePort"
@@ -267,28 +275,28 @@ questions:
     - "NodePort"
     - "ClusterIP"
     - "LoadBalancer"
-#Other Settings
+#Other Configuration
 - variable: psp
   default: "false"
   description: NeuVector Pod Security Policy when psp policy is enabled
   type: boolean
   label: Pod Security Policy
-  group: "Other Settings"
+  group: "Other Configuration"
 - variable: manager.runAsUser
   default: ""
   description: Specify the run as User ID
   type: int
   label: Manager runAsUser ID
-  group: "Other Settings"
+  group: "Other Configuration"
 - variable: cve.scanner.runAsUser
   default: ""
   description: Specify the run as User ID
   type: int
   label: Scanner runAsUser ID
-  group: "Other Settings"
+  group: "Other Configuration"
 - variable: cve.updater.runAsUser
   default: ""
   description: Specify the run as User ID
   type: int
   label: Updater runAsUser ID
-  group: "Other Settings"
+  group: "Other Configuration"
