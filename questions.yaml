@@ -74,9 +74,11 @@ questions:
   label: Docker Runtime
   show_subquestion_if: false
   group: "Container Runtime"
+  required: true
   subquestions:
   - variable: k3s.enabled
     default: "true"
+    required: true
     description: k3s containerd runtime. Enable only one runtime.
     type: boolean
     label: k3s Containerd Runtime
