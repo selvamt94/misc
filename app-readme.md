@@ -13,4 +13,6 @@ NeuVector integrates tightly with Rancher and Kubernetes to extend the built-in 
 
 Additional Notes:
 + Previous deployments from Rancher, such as from our Partners chart repository or the primary NeuVector Helm chart, must be completely removed in order to update to the new integrated feature chart. See https://github.com/rancher/rancher/issues/37447.
-+ Configure correct container runtime and runtime path under container runtime. Enable only one runtime.
++ Configure correct container runtime and runtime path under container runtime. Disable docker and enable k3s for RKE2 and K3S clusters.
++ For deploying on hardened RKE2 and K3s clusters, enable PSP and set user id from other settings for Manager, Scanner and Updater deployments. User id can be any number other than 0.
++ For deploying on hardened RKE clusters, enable PSP from other settings.
