@@ -1,4 +1,10 @@
 #!/bin/bash 
+
+# Run the script without any argument. It might take 10 to 15 minutes to collect data.
+# It can be run as it is if the node where it is running from is part of cluster, otherwise need modify to the port and controller IP.
+# Ref here for more info about REST API access https://open-docs.neuvector.com/automation/automation
+# Please gzip the files under logs/date/ctr and send to support
+
 _DATE_=`date +%Y%m%d_%H%M%S`
 if [ ! -d json ]; then
   mkdir json

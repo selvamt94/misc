@@ -1,4 +1,14 @@
+#!/bin/bash
+
+
+# Run the script without any argument. It might take 10 to 15 minutes to collect data.
+# It can be run as it is if the node where it is running from is part of cluster, otherwise need modify to the port and controller IP.
+# Ref here for more info about REST API access https://open-docs.neuvector.com/automation/automation
+# Please gzip the files under logs/date/ctr and send to support
+
+
 #if [ $# = "0" ];then
+
 #     echo $0 enforcer_pod name list
 #     echo example
 #     echo $0 neuvector-enforcer-pod-kxlnh neuvector-enforcer-pod-xrqz5
