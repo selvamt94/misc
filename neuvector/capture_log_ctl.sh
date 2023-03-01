@@ -14,7 +14,6 @@ if [ ! -d logs/$_DATE_/ctr ]; then
 fi
 
 port=10443
-_controllerIP_=`kubectl get pod --all-namespaces -o wide | grep -m 1 neuvector-controller-pod |awk '{print $7}'`
 _controllerIP_=`kubectl get pod -nneuvector -l app=neuvector-controller-pod -o jsonpath='{.items[0].status.podIP}'`
 #_controllerIP_=`svc.sh | grep controller-debug | awk '{print $5}'`
 
@@ -22,9 +21,9 @@ curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin
 _TOKEN_=`cat json/token.json | jq -r '.token.token'`
 curl -k -H "Content-Type: application/json" -H "X-Auth-Token: $_TOKEN_" "https://$_controllerIP_:$port/v1/controller" > /dev/null 2>&1  > json/controllers.json
 
-ids=`cat json/controllers.json | jq -r .controllers[].id`
+ids=(`cat json/controllers.json | jq -r .controllers[].id`)
 
-pods=`kubectl get pod -nneuvector -o wide| grep neuvector-controller-pod |awk '{print $1}'`
+pods=(`kubectl get pod -nneuvector -o wide| grep neuvector-controller-pod |awk '{print $1}'`)
 for pod in ${pods[@]}
 do
 	kubectl exec -ti -n neuvector $pod -- sh -c 'rm /var/neuvector/profile/*.prof' &> /dev/null
@@ -38,7 +37,7 @@ done
 
 sleep 33
 
-pods=`kubectl get pod -nneuvector -o wide| grep neuvector-controller-pod |awk '{print $1}'`
+pods=(`kubectl get pod -nneuvector -o wide| grep neuvector-controller-pod |awk '{print $1}'`)
 
 for pod in ${pods[@]}
 do
@@ -75,7 +74,7 @@ _TOKEN_=`cat json/token.json | jq -r '.token.token'`
 
 curl -k -H "Content-Type: application/json" -H "X-Auth-Token: $_TOKEN_" "https://$_controllerIP_:$port/v1/controller"  > /dev/null 2>&1  > json/ctrls.json
 
-_CTRLS_IDS_=`cat json/ctrls.json | jq -r .controllers[].id`
+_CTRLS_IDS_=(`cat json/ctrls.json | jq -r .controllers[].id`)
 
 echo "Enabling controller debug log"
 
@@ -96,7 +95,7 @@ sleep 10
 echo "waiting 10seconds to collect debug log"
 echo "Increase sleep seconds to collect log longer duration"
 
-ctrl_pods=`kubectl get pod -nneuvector -o wide| grep neuvector-controller-pod |awk '{print $1}'`
+ctrl_pods=(`kubectl get pod -nneuvector -o wide| grep neuvector-controller-pod |awk '{print $1}'`)
 
 for pod in ${ctrl_pods[@]}
 do
@@ -120,10 +119,7 @@ for id in  ${_CTRLS_IDS_[*]} ; do
 done
 
 
-port=10443
 ### Find leader controller
-_controllerIP_=`kubectl get pod -nneuvector -l app=neuvector-controller-pod -o jsonpath='{.items[0].status.podIP}'`
-port=10443
 curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin", "password": "admin"}}' "https://$_controllerIP_:$port/v1/auth" > /dev/null 2>&1 > json/token.json
 _TOKEN_=`cat json/token.json | jq -r '.token.token'`
 curl -k -H "Content-Type: application/json" -H "X-Auth-Token: $_TOKEN_" "https://$_controllerIP_:$port/v1/controller" > /dev/null 2>&1  > json/controllers.json
