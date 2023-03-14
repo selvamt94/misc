@@ -116,6 +116,7 @@ do
 done
 
 sleep 33
+echo "Waiting 33 seconds to capture profiles"
 
 for pod in ${enf_pods[@]}
 do
@@ -219,18 +220,5 @@ do
         pod=`cat json/enforcers.json | jq -r ".enforcers[] | select(.id == \"$id\") |.display_name"`
         enf_id=`echo $pod | cut -d "-" -f 4`
         curl -X PATCH  -k -H "Content-Type: application/json" -H "X-Auth-Token: $_TOKEN_" -d '{"config": {"disable_nvprotect": false}}' "https://$_controllerIP_:$port/v1/enforcer/$id"   >/dev/null 2>&1 > logs/$_DATE_/enf/enf-${enf_id}_protect-e.json
-
-done
-
-
-echo "enabling protect mode"
-
-sleep 1
-for id in ${_ENF_IDS_[@]}
-do
-        echo "enabling protect mode  enforcer $id"
-        pod=`cat json/enforcers.json | jq -r ".enforcers[] | select(.id == \"$id\") |.display_name"`
-        enf_id=`echo $pod | cut -d "-" -f 4`
-        curl -X PATCH  -k -H "Content-Type: application/json" -H "X-Auth-Token: $_TOKEN_" -d '{"config": {"disable_nvprotect": false}}' "https://$_controllerIP_:$port/v1/enforcer/$id"   >/dev/null 2>&1 > logs/$_DATE_/enf/enf-${enf_id}_protect.json
 
 done
