@@ -4,6 +4,7 @@
 # It can be run as it is if the node where it is running from is part of cluster, otherwise need modify to the port and controller IP.
 # Ref here for more info about REST API access https://open-docs.neuvector.com/automation/automation
 # Please gzip the files under logs/date/ctr and send to support
+# Change admin password
 
 _DATE_=`date +%Y%m%d_%H%M%S`
 if [ ! -d json ]; then
@@ -15,7 +16,37 @@ fi
 
 port=10443
 _controllerIP_=`kubectl get pod -nneuvector -l app=neuvector-controller-pod -o jsonpath='{.items[0].status.podIP}'`
+_PING_STATUS=`ping $_controllerIP_ -c 1 -w 2 | grep loss | awk '{print $6}' | awk -F% '{print $1}'`
 #_controllerIP_=`svc.sh | grep controller-debug | awk '{print $5}'`
+_hostIP_=`kubectl get pod -nneuvector -l app=neuvector-controller-pod  -o jsonpath='{.items[0].status.hostIP}'`
+_RESTAPINPSVC_=`kubectl get svc -nneuvector | grep 10443 |grep NodePort | awk '{print $1}'`
+_RESTAPIPORT_=`kubectl get svc -nneuvector $_RESTAPINPSVC_ -o jsonpath='{.spec.ports[].nodePort}'`
+_RESTAPILBSVC_=`kubectl get svc -nneuvector | grep 10443 |grep LoadBalancer | awk '{print $1}'`
+_RESTAPILBIP_=`kubectl get svc -n neuvector $_RESTAPILBSVC_ -ojsonpath='{.spec.externalIPs[0]}'`
+
+if [ ! -z $_RESTAPINPSVC_ ]; then 
+   _controllerIP_=$_hostIP_
+   port=$_RESTAPIPORT_
+   echo "controller is accessed by REST API nodeport service"
+   echo $_controllerIP_ $port
+elif [ ! -z $_RESTAPILBSVC_ ]; then
+   _controllerIP_=$_RESTAPILBIP_
+   port=10443
+   echo "controller is accessed by REST API LoadBalancer service"
+   echo $_controllerIP_ $port
+elif [ $_PING_STATUS = "0" ];then
+   port=10443
+   _controllerIP_=`kubectl get pod -nneuvector -l app=neuvector-controller-pod -o jsonpath='{.items[0].status.podIP}'`
+   echo "controller is accessed by controller pod IP"
+   echo $_controllerIP_ $port
+else
+   echo "controller can not be accessed "
+   _APISTATUS_=0
+   echo "controller profile can not be collected"
+   #exit
+fi
+
+
 
 curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin", "password": "admin"}}' "https://$_controllerIP_:$port/v1/auth" > /dev/null 2>&1 > json/token.json
 _TOKEN_=`cat json/token.json | jq -r '.token.token'`
@@ -66,9 +97,6 @@ kubectl top pod -nneuvector  > logs/$_DATE_/ctr/neuvector-top-output
 
 
 #REST API to enable cpath conn debug on all clusters in the cluster
-port=10443
-_controllerIP_=`kubectl get pod --all-namespaces -o wide | grep -m 1 neuvector-controller-pod |awk '{print $7}'`
-_controllerIP_=`kubectl get pod -nneuvector -l app=neuvector-controller-pod -o jsonpath='{.items[0].status.podIP}'`
 curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin", "password": "admin"}}' "https://$_controllerIP_:$port/v1/auth"   > /dev/null 2>&1 > json/token.json
 _TOKEN_=`cat json/token.json | jq -r '.token.token'`
 

@@ -61,7 +61,7 @@ _TOKEN_=`cat json/token.json | jq -r '.token.token'`
 #_controllerIP_=`svc.sh | grep controller-debug | awk '{print $5}'`
 #enf_pods=(`kubectl top pod -n neuvector | grep enforcer | grep -P '\d\d\d\d+m'| head -n 5`)
 #enf_pods=(`kubectl top pod -n neuvector | grep enforcer | grep -P '\d\d+m'| head -n 5|awk '{print $1}'`)
-enf_pods=(`kubectl top pod -n neuvector --sort-by=memory | grep enforce |head -n 5|awk '{print $1}'`)
+enf_pods=(`kubectl top pod -n neuvector --sort-by=cpu | grep enforce |head -n 5|awk '{print $1}'`)
 
 #enf_pods=$@
 
@@ -148,7 +148,7 @@ done
 
 
 kubectl top node > logs/$_DATE_/enf/node-top-output
-kubectl top pod -nneuvector --sort-by=memory > logs/$_DATE_/enf/neuvector-top-output
+kubectl top pod -nneuvector  --sort-by=cpu > logs/$_DATE_/enf/neuvector-top-output
 
 
 
