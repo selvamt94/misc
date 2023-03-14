@@ -51,7 +51,7 @@ elif [ $_PING_STATUS = "0" ];then
 else
    echo "controller can not be accessed "
    _APISTATUS_=0
-   echo "controller profile can not be collected"
+   echo "enforcer profile can not be collected"
    #exit
 fi
 
