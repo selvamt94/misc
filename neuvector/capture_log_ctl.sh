@@ -1,10 +1,11 @@
 #!/bin/bash 
 
 # Run the script without any argument. It might take 10 to 15 minutes to collect data.
-# It can be run as it is if the node where it is running from is part of cluster, otherwise need modify to the port and controller IP.
+# Please below Ref below document if controller can not be access via controller pod IP to enable REST API .
 # Ref here for more info about REST API access https://open-docs.neuvector.com/automation/automation
 # Please gzip the files under logs/date/ctr and send to support
 # Change admin password
+
 
 _DATE_=`date +%Y%m%d_%H%M%S`
 if [ ! -d json ]; then
@@ -13,6 +14,7 @@ fi
 if [ ! -d logs/$_DATE_/ctr ]; then
   mkdir -p logs/$_DATE_/ctr
 fi
+pass=admin
 
 port=10443
 _controllerIP_=`kubectl get pod -nneuvector -l app=neuvector-controller-pod -o jsonpath='{.items[0].status.podIP}'`
@@ -48,7 +50,7 @@ fi
 
 
 
-curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin", "password": "admin"}}' "https://$_controllerIP_:$port/v1/auth" > /dev/null 2>&1 > json/token.json
+curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin", "password": '\"$pass\"'}}' "https://$_controllerIP_:$port/v1/auth" > /dev/null 2>&1 > json/token.json
 _TOKEN_=`cat json/token.json | jq -r '.token.token'`
 curl -k -H "Content-Type: application/json" -H "X-Auth-Token: $_TOKEN_" "https://$_controllerIP_:$port/v1/controller" > /dev/null 2>&1  > json/controllers.json
 
@@ -97,7 +99,7 @@ kubectl top pod -nneuvector  > logs/$_DATE_/ctr/neuvector-top-output
 
 
 #REST API to enable cpath conn debug on all clusters in the cluster
-curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin", "password": "admin"}}' "https://$_controllerIP_:$port/v1/auth"   > /dev/null 2>&1 > json/token.json
+curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin", "password": '\"$pass\"'}}' "https://$_controllerIP_:$port/v1/auth"   > /dev/null 2>&1 > json/token.json
 _TOKEN_=`cat json/token.json | jq -r '.token.token'`
 
 curl -k -H "Content-Type: application/json" -H "X-Auth-Token: $_TOKEN_" "https://$_controllerIP_:$port/v1/controller"  > /dev/null 2>&1  > json/ctrls.json
@@ -148,7 +150,7 @@ done
 
 
 ### Find leader controller
-curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin", "password": "admin"}}' "https://$_controllerIP_:$port/v1/auth" > /dev/null 2>&1 > json/token.json
+curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin", "password": '\"$pass\"'}}' "https://$_controllerIP_:$port/v1/auth" > /dev/null 2>&1 > json/token.json
 _TOKEN_=`cat json/token.json | jq -r '.token.token'`
 curl -k -H "Content-Type: application/json" -H "X-Auth-Token: $_TOKEN_" "https://$_controllerIP_:$port/v1/controller" > /dev/null 2>&1  > json/controllers.json
 leader_pod=`cat json/controllers.json | jq -r '."controllers"[] | select(.leader==true) | .display_name'`

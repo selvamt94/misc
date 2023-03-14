@@ -2,9 +2,11 @@
 
 
 # Run the script without any argument. It might take 10 to 15 minutes to collect data.
-# It can be run as it is if the node where it is running from is part of cluster, otherwise need modify to the port and controller IP.
+# Please below Ref below document if controller can not be access via controller pod IP to enable REST API .
 # Ref here for more info about REST API access https://open-docs.neuvector.com/automation/automation
-# Please gzip the files under logs/date/enf and send to support
+# Please gzip the files under logs/date/ctr and send to support
+# Change admin password
+
 
 
 #if [ $# = "0" ];then
@@ -23,6 +25,7 @@ fi
 if [ ! -d logs/$_DATE_/enf ]; then
   mkdir -p logs/$_DATE_/enf
 fi
+pass=admin
 port=10443
 _controllerIP_=`kubectl get pod -nneuvector -l app=neuvector-controller-pod -o jsonpath='{.items[0].status.podIP}'`
 _PING_STATUS=`ping $_controllerIP_ -c 1 -w 2 | grep loss | awk '{print $6}' | awk -F% '{print $1}'`
@@ -55,7 +58,7 @@ else
    #exit
 fi
 
-curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin", "password": "admin"}}' "https://$_controllerIP_:$port/v1/auth"   > /dev/null 2>&1 > json/token.json
+curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin", "password": '\"$pass\"'}}' "https://$_controllerIP_:$port/v1/auth"   > /dev/null 2>&1 > json/token.json
 _TOKEN_=`cat json/token.json | jq -r '.token.token'`
 
 #_controllerIP_=`svc.sh | grep controller-debug | awk '{print $5}'`
@@ -152,7 +155,7 @@ kubectl top pod -nneuvector --sort-by=memory > logs/$_DATE_/enf/neuvector-top-ou
 
 
 
-curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin", "password": "admin"}}' "https://$_controllerIP_:$port/v1/auth"   > /dev/null 2>&1 > json/token.json
+curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin", "password": '\"$pass\"'}}' "https://$_controllerIP_:$port/v1/auth"   > /dev/null 2>&1 > json/token.json
 _TOKEN_=`cat json/token.json | jq -r '.token.token'`
 
 curl -k -H "Content-Type: application/json" -H "X-Auth-Token: $_TOKEN_" "https://$_controllerIP_:$port/v1/enforcer"  > /dev/null 2>&1  > json/enforcers.json
