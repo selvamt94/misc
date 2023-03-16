@@ -60,6 +60,7 @@ fi
 
 curl -k -H "Content-Type: application/json" -d '{"password": {"username": "admin", "password": '\"$pass\"'}}' "https://$_controllerIP_:$port/v1/auth"   > /dev/null 2>&1 > json/token.json
 _TOKEN_=`cat json/token.json | jq -r '.token.token'`
+curl -k -H "Content-Type: application/json" -H "X-Auth-Token: $_TOKEN_" "https://$_controllerIP_:$port/v1/enforcer" > /dev/null 2>&1  > json/enforcers.json
 
 #_controllerIP_=`svc.sh | grep controller-debug | awk '{print $5}'`
 #enf_pods=(`kubectl top pod -n neuvector | grep enforcer | grep -P '\d\d\d\d+m'| head -n 5`)
