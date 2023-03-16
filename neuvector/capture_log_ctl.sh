@@ -21,9 +21,9 @@ _controllerIP_=`kubectl get pod -nneuvector -l app=neuvector-controller-pod -o j
 _PING_STATUS=`ping $_controllerIP_ -c 1 -w 2 | grep loss | awk '{print $6}' | awk -F% '{print $1}'`
 #_controllerIP_=`svc.sh | grep controller-debug | awk '{print $5}'`
 _hostIP_=`kubectl get pod -nneuvector -l app=neuvector-controller-pod  -o jsonpath='{.items[0].status.hostIP}'`
-_RESTAPINPSVC_=`kubectl get svc -nneuvector | grep 10443 |grep NodePort | awk '{print $1}'`
+_RESTAPINPSVC_=`kubectl get svc -nneuvector | grep 10443 |grep -v fed|grep NodePort | awk '{print $1}'`
 _RESTAPIPORT_=`kubectl get svc -nneuvector $_RESTAPINPSVC_ -o jsonpath='{.spec.ports[].nodePort}'`
-_RESTAPILBSVC_=`kubectl get svc -nneuvector | grep 10443 |grep LoadBalancer | awk '{print $1}'`
+_RESTAPILBSVC_=`kubectl get svc -nneuvector | grep 10443 |grep -v fed|grep LoadBalancer | awk '{print $1}'`
 _RESTAPILBIP_=`kubectl get svc -n neuvector $_RESTAPILBSVC_ -ojsonpath='{.spec.externalIPs[0]}'`
 
 if [ ! -z $_RESTAPINPSVC_ ]; then 
