@@ -1,0 +1,209 @@
+apiVersion: v1
+items:
+- apiVersion: neuvector.com/v1
+  kind: NvSecurityRule
+  metadata:
+    name: nv.nginx-pod.demo
+    namespace: demo
+  spec:
+    egress:
+    - selector:
+        criteria:
+        - key: service
+          op: =
+          value: node-pod.demo
+        - key: domain
+          op: =
+          value: demo
+        name: nv.node-pod.demo
+      action: allow
+      applications:
+      - HTTP
+      name: nv.node-pod.demo-egress-0
+      ports: any
+    file: []
+    ingress:
+    - selector:
+        criteria:
+        - key: service
+          op: =
+          value: exploit.demo
+        - key: domain
+          op: =
+          value: demo
+        name: nv.exploit.demo
+      action: allow
+      applications:
+      - HTTP
+      name: nv.nginx-pod.demo-ingress-0
+      ports: any
+    process:
+    - action: allow
+      name: nginx
+      path: /usr/sbin/nginx
+    - action: allow
+      name: pause
+      path: /pause
+    - action: allow
+      name: ps
+      path: /bin/ps
+    target:
+      selector:
+        criteria:
+        - key: service
+          op: =
+          value: nginx-pod.demo
+        - key: domain
+          op: =
+          value: demo
+        name: nv.nginx-pod.demo
+      policymode: Monitor
+- apiVersion: neuvector.com/v1
+  kind: NvSecurityRule
+  metadata:
+    name: nv.node-pod.demo
+    namespace: demo
+  spec:
+    egress:
+    - selector:
+        criteria:
+        - key: address
+          op: =
+          value: google.com
+        name: test
+      action: allow
+      applications:
+      - SSL
+      name: test-egress-1
+      ports: any
+    - selector:
+        criteria:
+        - key: service
+          op: =
+          value: redis-pod.demo
+        - key: domain
+          op: =
+          value: demo
+        name: nv.redis-pod.demo
+      action: allow
+      applications:
+      - Redis
+      name: nv.redis-pod.demo-egress-2
+      ports: any
+    - selector:
+        criteria:
+        - key: service
+          op: =
+          value: kube-dns.kube-system
+        - key: domain
+          op: =
+          value: kube-system
+        name: nv.kube-dns.kube-system
+      action: allow
+      applications:
+      - DNS
+      name: nv.kube-dns.kube-system-egress-3
+      ports: any
+    file: []
+    ingress: []
+    process:
+    - action: allow
+      name: curl
+      path: ""
+    - action: allow
+      name: node
+      path: /usr/bin/nodejs
+    - action: allow
+      name: pause
+      path: /pause
+    - action: allow
+      name: ps
+      path: /bin/ps
+    - action: allow
+      name: sh
+      path: /bin/dash
+    - action: allow
+      name: whoami
+      path: /usr/bin/whoami
+    target:
+      selector:
+        criteria:
+        - key: service
+          op: =
+          value: node-pod.demo
+        - key: domain
+          op: =
+          value: demo
+        name: nv.node-pod.demo
+      policymode: Protect
+- apiVersion: neuvector.com/v1
+  kind: NvSecurityRule
+  metadata:
+    name: nv.redis-pod.demo
+    namespace: demo
+  spec:
+    egress: []
+    file: []
+    ingress: []
+    process:
+    - action: allow
+      name: pause
+      path: /pause
+    - action: allow
+      name: redis-server
+      path: /usr/local/bin/redis-server
+    target:
+      selector:
+        criteria:
+        - key: service
+          op: =
+          value: redis-pod.demo
+        - key: domain
+          op: =
+          value: demo
+        name: nv.redis-pod.demo
+      policymode: Monitor
+- apiVersion: neuvector.com/v1
+  kind: NvSecurityRule
+  metadata:
+    name: nv.kube-dns.kube-system
+    namespace: kube-system
+  spec:
+    egress: null
+    file: null
+    ingress: null
+    process: null
+    target:
+      selector:
+        criteria:
+        - key: service
+          op: =
+          value: kube-dns.kube-system
+        - key: domain
+          op: =
+          value: kube-system
+        name: nv.kube-dns.kube-system
+      policymode: Monitor
+- apiVersion: neuvector.com/v1
+  kind: NvSecurityRule
+  metadata:
+    name: nv.exploit.demo
+    namespace: demo
+  spec:
+    egress: null
+    file: null
+    ingress: null
+    process: null
+    target:
+      selector:
+        criteria:
+        - key: service
+          op: =
+          value: exploit.demo
+        - key: domain
+          op: =
+          value: demo
+        name: nv.exploit.demo
+      policymode: Monitor
+kind: List
+metadata: null
