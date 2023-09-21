@@ -35,6 +35,11 @@ _RESTAPINPSVC_=`kubectl get svc -nneuvector | grep 10443 |grep -v fed|grep NodeP
 _RESTAPIPORT_=`kubectl get svc -nneuvector $_RESTAPINPSVC_ -o jsonpath='{.spec.ports[].nodePort}'`
 _RESTAPILBSVC_=`kubectl get svc -nneuvector | grep 10443 |grep -v fed|grep LoadBalancer | awk '{print $1}'`
 _RESTAPILBIP_=`kubectl get svc -n neuvector $_RESTAPILBSVC_ -ojsonpath='{.spec.externalIPs[0]}'`
+if [ -z $_RESTAPILBIP_ ];then
+
+  _RESTAPILBIP_=`kubectl get svc -n neuvector $_RESTAPILBSVC_ -ojsonpath='{.status.loadBalancer.ingress[].hostname}'`
+
+fi
 
 if [ ! -z $_RESTAPINPSVC_ ]; then
    _controllerIP_=$_hostIP_
