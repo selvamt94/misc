@@ -34,7 +34,14 @@ _hostIP_=`kubectl get pod -nneuvector -l app=neuvector-controller-pod  -o jsonpa
 _RESTAPINPSVC_=`kubectl get svc -nneuvector | grep 10443 |grep -v fed|grep NodePort | awk '{print $1}'`
 _RESTAPIPORT_=`kubectl get svc -nneuvector $_RESTAPINPSVC_ -o jsonpath='{.spec.ports[].nodePort}'`
 _RESTAPILBSVC_=`kubectl get svc -nneuvector | grep 10443 |grep -v fed|grep LoadBalancer | awk '{print $1}'`
-_RESTAPILBIP_=`kubectl get svc -n neuvector $_RESTAPILBSVC_ -ojsonpath='{.spec.externalIPs[0]}'`
+_RESTAPILBIP1_=`kubectl get svc -n neuvector $_RESTAPILBSVC_ -ojsonpath='{.spec.externalIPs[0]}'`
+_RESTAPILBIP2_=`kubectl get svc -n neuvector $_RESTAPILBSVC_ -ojsonpath='{.status.loadBalancer.ingress[].ip}'`
+
+if [  -z _RESTAPILBIP1_ ];then
+  _RESTAPILBIP=$_RESTAPILBIP1_
+else
+  _RESTAPILBIP_=$_RESTAPILBIP2_
+fi
 if [ -z $_RESTAPILBIP_ ];then
 
   _RESTAPILBIP_=`kubectl get svc -n neuvector $_RESTAPILBSVC_ -ojsonpath='{.status.loadBalancer.ingress[].hostname}'`
