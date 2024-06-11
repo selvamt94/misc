@@ -14,7 +14,7 @@ fi
 if [ ! -d logs/$_DATE_/ctr ]; then
   mkdir -p logs/$_DATE_/ctr
 fi
-pass=P@ssw0rd
+pass=admin
 
 port=10443
 _controllerIP_=`kubectl get pod -nneuvector -l app=neuvector-controller-pod -o jsonpath='{.items[0].status.podIP}'`
