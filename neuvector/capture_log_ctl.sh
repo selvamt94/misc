@@ -14,7 +14,7 @@ fi
 if [ ! -d logs/$_DATE_/ctr ]; then
   mkdir -p logs/$_DATE_/ctr
 fi
-pass=admin
+pass=P@ssw0rd
 
 port=10443
 _controllerIP_=`kubectl get pod -nneuvector -l app=neuvector-controller-pod -o jsonpath='{.items[0].status.podIP}'`
@@ -87,14 +87,17 @@ pods=(`kubectl get pod -nneuvector -o wide| grep neuvector-controller-pod |awk '
 
 for pod in ${pods[@]}
 do
-	kubectl cp -n neuvector $pod:var/neuvector/profile/ctl.cpu.prof logs/$_DATE_/ctr/ctl.cpu.prof
-	kubectl cp -n neuvector $pod:var/neuvector/profile/ctl.goroutine.prof logs/$_DATE_/ctr/ctl.goroutine.prof
-	kubectl cp -n neuvector $pod:var/neuvector/profile/ctl.gc.memory.prof logs/$_DATE_/ctr/ctl.gc.memory.prof
-	kubectl cp -n neuvector $pod:var/neuvector/profile/ctl.memory.prof logs/$_DATE_/ctr/ctl.memory.prof
+	# June 11, 2024. Profile path changes from /var/neuvector to /var/nv_debug
+	kubectl cp -n neuvector $pod:var/nv_debug/profile/ctl.cpu.prof logs/$_DATE_/ctr/ctl.cpu.prof
+	kubectl cp -n neuvector $pod:var/nv_debug/profile/ctl.goroutine.prof logs/$_DATE_/ctr/ctl.goroutine.prof
+	# June 11, 2024. ctl.gc.memory.prof is not generated from 5.3.0
+	#kubectl cp -n neuvector $pod:var/nv_debug/profile/ctl.gc.memory.prof logs/$_DATE_/ctr/ctl.gc.memory.prof
+	kubectl cp -n neuvector $pod:var/nv_debug/profile/ctl.memory.prof logs/$_DATE_/ctr/ctl.memory.prof
 	id=`echo $pod | cut -d "-" -f 5`
 	mv logs/$_DATE_/ctr/ctl.cpu.prof logs/$_DATE_/ctr/ctl.${id}.cpu.prof
 	mv logs/$_DATE_/ctr/ctl.goroutine.prof logs/$_DATE_/ctr/ctl.goroutine.${id}.prof
-	mv logs/$_DATE_/ctr/ctl.gc.memory.prof logs/$_DATE_/ctr/ctl.gc.memory.${id}.prof
+	# June 11, 2024. ctl.gc.memory.prof is not generated from 5.3.0
+	#mv logs/$_DATE_/ctr/ctl.gc.memory.prof logs/$_DATE_/ctr/ctl.gc.memory.${id}.prof
 	mv logs/$_DATE_/ctr/ctl.memory.prof logs/$_DATE_/ctr/ctl.${id}.memory.prof
 done
 
@@ -182,4 +185,3 @@ kubectl exec -ti -nneuvector $leader_pod -- consul snapshot inspect -kvdetails -
 kubectl exec -ti -nneuvector $leader_pod -- ls -l
 
 kubectl cp -n neuvector $leader_pod:backup.snap logs/$_DATE_/ctr/backup.snap
-
